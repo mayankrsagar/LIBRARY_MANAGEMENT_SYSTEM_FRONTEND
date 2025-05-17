@@ -50,7 +50,7 @@ export const addBook = createAsyncThunk<
   async (bookData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'http://localhost:4000/api/v1/book/admin/add',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/book/admin/add',
         bookData,
         {
           headers: { 'Content-Type': 'application/json' },
@@ -81,7 +81,7 @@ export const getAllBooks = createAsyncThunk<
   'books/getAllBooks',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/book/all', { withCredentials: true });
+      const response = await axios.get('https://library-management-system-backend-fhdy.onrender.com/api/v1/book/all', { withCredentials: true });
       const { message, data } = response.data as {
         message: string;
         data: BookAdditionalData[];
@@ -106,7 +106,7 @@ export const deleteBook = createAsyncThunk<
   'books/deleteBook',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`http://localhost:4000/api/v1/book/delete/${id}`, {
+      const response = await axios.delete(`https://library-management-system-backend-fhdy.onrender.com/api/v1/book/delete/${id}`, {
         withCredentials: true,
       });
       const { message, data } = response.data as {

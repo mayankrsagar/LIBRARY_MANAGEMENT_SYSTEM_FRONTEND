@@ -60,7 +60,7 @@ export const borrowedBookByUser = createAsyncThunk<
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        'http://localhost:4000/api/v1/borrow/my-borrowed-books',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/borrow/my-borrowed-books',
         { withCredentials: true }
       );
       const { message, data } = response.data as {
@@ -89,7 +89,7 @@ export const getAllBorrowedBooks = createAsyncThunk<
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        'http://localhost:4000/api/v1/borrow/borrowed-books-by-users',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/borrow/borrowed-books-by-users',
         { withCredentials: true }
       );
       const { message, data } = response.data as {
@@ -118,7 +118,7 @@ export const recordBorrowedBook = createAsyncThunk<
   async ({ email, id }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/v1/borrow/record-borrow-book/${id}`,
+        `https://library-management-system-backend-fhdy.onrender.com/api/v1/borrow/record-borrow-book/${id}`,
         { email },
         { withCredentials: true }
       );
@@ -148,7 +148,7 @@ export const returnBorrowedBook = createAsyncThunk<
   async ({ email, id }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/v1/borrow/return-borrowed-book/${id}`,
+        `https://library-management-system-backend-fhdy.onrender.com/api/v1/borrow/return-borrowed-book/${id}`,
         { email },
         { withCredentials: true }
       );

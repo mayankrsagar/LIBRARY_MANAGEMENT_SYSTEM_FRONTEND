@@ -80,7 +80,7 @@ export const getAllUsers = createAsyncThunk<
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get<GetAllUsersResponse>(
-        'http://localhost:4000/api/v1/user/all',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/user/all',
         { withCredentials: true }
       );
       const { gotAllUser, message } = response.data;
@@ -115,7 +115,7 @@ export const addNewAdmin = createAsyncThunk<
       formData.append('password', password);
 
       const response = await axios.post(
-        'http://localhost:4000/api/v1/user/add/new-admin',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/user/add/new-admin',
         formData,
         {
           headers: {

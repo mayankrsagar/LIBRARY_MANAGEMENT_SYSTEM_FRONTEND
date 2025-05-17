@@ -84,7 +84,7 @@ export const register = createAsyncThunk<
   async (userData, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        'http://localhost:4000/api/v1/auth/register',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/auth/register',
         userData,
         { withCredentials: true }
       );
@@ -108,7 +108,7 @@ export const otpVerification = createAsyncThunk<
   async ({ email, otp }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        'http://localhost:4000/api/v1/auth/verify-otp',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/auth/verify-otp',
         { email, otp },
         { withCredentials: true }
       );
@@ -132,7 +132,7 @@ export const login = createAsyncThunk<
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        'http://localhost:4000/api/v1/auth/login',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/auth/login',
         { email, password },
         { withCredentials: true }
       );
@@ -156,7 +156,7 @@ export const logout = createAsyncThunk<
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        'http://localhost:4000/api/v1/auth/logout',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/auth/logout',
         {},
         { withCredentials: true }
       );
@@ -183,7 +183,7 @@ export const getUser = createAsyncThunk<
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get<GetUserApiResponse>(
-        'http://localhost:4000/api/v1/auth/me',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/auth/me',
         { withCredentials: true }
       );
 
@@ -217,7 +217,7 @@ export const forgotPassword = createAsyncThunk<
   async ({ email }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        'http://localhost:4000/api/v1/auth/password/forgot',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/auth/password/forgot',
         { email },
         { withCredentials: true }
       );
@@ -242,7 +242,7 @@ export const resetPassword = createAsyncThunk<
   async ({ token, password,confirmPassword }, { rejectWithValue }) => {
     try {
       const { data } = await axios.put(
-        `http://localhost:4000/api/v1/auth/password/reset/${token}`,
+        `https://library-management-system-backend-fhdy.onrender.com/api/v1/auth/password/reset/${token}`,
         { password,confirmPassword },
         { withCredentials: true }
       );
@@ -269,7 +269,7 @@ export const updatePassword = createAsyncThunk<
   ) => {
     try {
       const { data } = await axios.put(
-        'http://localhost:4000/api/v1/auth/password/update',
+        'https://library-management-system-backend-fhdy.onrender.com/api/v1/auth/password/update',
         { currentPassword, newPassword, confirmNewPassword },
         { withCredentials: true }
       );
