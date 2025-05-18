@@ -43,19 +43,18 @@ const BookManagement: React.FC = () => {
 
   const [borrowBookId, setBorrowBookId] = useState<string>('');
   const [searchTitle, setSearchTitle] = useState<string>('');
-
 useEffect(() => {
-  // only toast on create/update/record/return actions
-  const successVerbs = ['add', 'created', 'record', 'returned', 'updated'];
-  if (message && successVerbs.some(v => message.toLowerCase().includes(v))) {
+  // only show real write‐action successes
+  if (message && !message.toLowerCase().includes('fetch')) {
     toast.success(message);
     dispatch(resetBookSlice());
   }
-  if (borrowMessage && successVerbs.some(v => borrowMessage.toLowerCase().includes(v))) {
+  if (borrowMessage && !borrowMessage.toLowerCase().includes('fetch')) {
     toast.success(borrowMessage);
     dispatch(resetBorrowSlice());
   }
 
+  // show errors always
   if (error) {
     toast.error(error);
     dispatch(resetBookSlice());
