@@ -49,7 +49,10 @@ const Catalog: React.FC = () => {
     }
 
     // only toast for return success, not for fetch
-    if (message && /returned|successfully/i.test(message)) {
+    if (message 
+      // && 
+      // /returned|successfully/i.test(message)
+    ) {
       toast.success(message);
       dispatch(getAllBorrowedBooks());
       dispatch(resetBorrowSlice());
