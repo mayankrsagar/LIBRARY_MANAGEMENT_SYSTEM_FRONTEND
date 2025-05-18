@@ -39,7 +39,7 @@ const Catalog: React.FC = () => {
   // fetch all records once
   useEffect(() => {
     dispatch(getAllBorrowedBooks());
-  }, [dispatch]);
+  }, []);
 
   // handle success/error messages for return actions only
   useEffect(() => {
