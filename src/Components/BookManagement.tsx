@@ -44,23 +44,28 @@ const BookManagement: React.FC = () => {
   const [borrowBookId, setBorrowBookId] = useState<string>('');
   const [searchTitle, setSearchTitle] = useState<string>('');
 
-  useEffect(() => {
-    // only show toasts for add/update actions, not fetch
-    const skipFetchPatterns = ['fetched', 'fetch'];
-    const shouldToastSuccess = message && !skipFetchPatterns.some(p => message.toLowerCase().includes(p))
-      || borrowMessage && !skipFetchPatterns.some(p => borrowMessage.toLowerCase().includes(p));
-    if (shouldToastSuccess) {
-      toast.success(message || borrowMessage);
-      dispatch(resetBookSlice());
-      dispatch(resetBorrowSlice());
-    }
-    const shouldToastError = error || borrowError;
-    if (shouldToastError) {
-      toast.error(error || borrowError);
-      dispatch(resetBookSlice());
-      dispatch(resetBorrowSlice());
-    }
-  }, [message, error, borrowMessage, borrowError, dispatch]);
+useEffect(() => {
+  // only toast on create/update/record/return actions
+  const successVerbs = ['add', 'created', 'record', 'returned', 'updated'];
+  if (message && successVerbs.some(v => message.toLowerCase().includes(v))) {
+    toast.success(message);
+    dispatch(resetBookSlice());
+  }
+  if (borrowMessage && successVerbs.some(v => borrowMessage.toLowerCase().includes(v))) {
+    toast.success(borrowMessage);
+    dispatch(resetBorrowSlice());
+  }
+
+  if (error) {
+    toast.error(error);
+    dispatch(resetBookSlice());
+  }
+  if (borrowError) {
+    toast.error(borrowError);
+    dispatch(resetBorrowSlice());
+  }
+}, [message, borrowMessage, error, borrowError, dispatch]);
+
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTitle(e.target.value.toLowerCase());
