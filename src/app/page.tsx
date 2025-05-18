@@ -35,87 +35,61 @@ export type ComponentType =
   | 'Add New Admin'
   | 'Change Credentials';
 
-
-
 export default function Home() {
   const [selectedComponent, setSelectedComponent] = useState<ComponentType>('Dashboard');
-  const dispatch = useAppDispatch();
-  const router=useRouter();
-  const { isAuthenticated, user } = useSelector((s: RootState) => s.auth);
-  const { addNewAdminPopup ,settingPopup } = useSelector((s: RootState) => s.popup);
+  const dispatch   = useAppDispatch();
+  const router     = useRouter();
 
-  // const handleLogout = () => {
-  //   dispatch(logout());
-  // };
+  // pull both loading *and* isAuthenticated from auth slice
+  const { loading: authLoading, isAuthenticated, user } =
+    useSelector((s: RootState) => s.auth);
+  const { addNewAdminPopup, settingPopup } = useSelector((s: RootState) => s.popup);
+
+  // On mount: fire the “me” request
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
+
+  // When authLoading flips false:
+  //  - if still not authenticated, send to login
+  //  - if authenticated, fetch your other data
+  useEffect(() => {
+    if (authLoading) return;             // still checking
+    if (!isAuthenticated) {
+      router.push('/login');
+    } else {
+      // only fetch books/users once we're confirmed logged in
+      dispatch(getAllBooks());
+      if (user?.role === 'Admin') {
+        dispatch(getAllUsers());
+      }
+    }
+  }, [authLoading, isAuthenticated, user, router, dispatch]);
 
   const renderContent = () => {
     switch (selectedComponent) {
-      case 'Dashboard':
-        return user?.role === 'User' ? <UserDashboard /> : <AdminDashboard />;
-      case 'Books':
-        return <BookManagement />;
-      case 'Catalog':
-        return user?.role === 'Admin' ? <Catalog /> : <UserDashboard />;
-      case 'Users':
-        return user?.role === 'Admin' ? <Users /> : <UserDashboard />;
-      case 'My Borrowed Books':
-        return <MyBorrowedBooks />;
-      default:
-        return user?.role === 'User' ? <UserDashboard /> : <AdminDashboard />;
+      case 'Dashboard':          return user?.role === 'User' ? <UserDashboard /> : <AdminDashboard />;
+      case 'Books':              return <BookManagement />;
+      case 'Catalog':            return user?.role === 'Admin' ? <Catalog /> : <UserDashboard />;
+      case 'Users':              return user?.role === 'Admin' ? <Users /> : <UserDashboard />;
+      case 'My Borrowed Books':  return <MyBorrowedBooks />;
+      default:                   return user?.role === 'User' ? <UserDashboard /> : <AdminDashboard />;
     }
   };
-
- 
-
-  
-// Redirect if not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
-  
-  }, [router,isAuthenticated]);
-
-useEffect(()=>{
-  dispatch(getUser());
-  dispatch(getAllBooks());
-  // dispatch(getAllBorrowedBooks());
-  if(isAuthenticated && user?.role === "Admin"){
-    dispatch(getAllUsers());
-  }
-// eslint-disable-next-line react-hooks/exhaustive-deps
-},[])
-
-   
-  
 
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
 
-      <div className="flex pt-20"> {/* pt-20 offsets the fixed header */}
-        <HamburgerMenu
-          setSelectedComponent={setSelectedComponent}
-          // onLogout={handleLogout}
-        />
+      <div className="flex pt-20">
+        <HamburgerMenu setSelectedComponent={setSelectedComponent} />
+        <Sidebar      setSelectedComponent={setSelectedComponent} />
 
-        {/* Desktop sidebar */}
-      <Sidebar
-        setSelectedComponent={setSelectedComponent}
-        // onLogout={handleLogout}
-      />
-
-        {addNewAdminPopup && (
-          <AddNewAdminPopup/>
-        )}
-
-        {
-          settingPopup && <UpdatePasswordPopup />
-        }
-
+        {addNewAdminPopup && <AddNewAdminPopup />}
+        {settingPopup     && <UpdatePasswordPopup />}
 
         <main className="flex-1 p-6">
-          {renderContent()}
+          {!authLoading && renderContent()}
         </main>
       </div>
     </div>
