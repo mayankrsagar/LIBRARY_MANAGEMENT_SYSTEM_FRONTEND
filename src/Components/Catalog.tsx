@@ -1,5 +1,6 @@
 import React, {
   useEffect,
+  useRef,
   useState,
 } from 'react';
 
@@ -26,36 +27,32 @@ const Catalog: React.FC = () => {
   const { allBorrowedBooks, loading, error, message } = useSelector(
     (state: RootState) => state.borrow
   );
-  const { returnPopup } = useSelector(
-    (state: RootState) => state.popup
-  );
+  const { returnPopup } = useSelector((state: RootState) => state.popup);
 
-  const [emailAndId, setEmailAndId] = useState<EmailAndId>({
-    email: '',
-    id: '',
-  });
+  const [emailAndId, setEmailAndId] = useState<EmailAndId>({ email: '', id: '' });
   const [activeTab, setActiveTab] = useState<'borrowed' | 'overdue'>('borrowed');
 
   // fetch all records once
   useEffect(() => {
     dispatch(getAllBorrowedBooks());
-  }, []);
+  }, [dispatch]);
 
-  // handle success/error messages for return actions only
+  // handle return success/error only once per change
+  const prevMsg = useRef<string | null>(null);
   useEffect(() => {
-    if (error) {
+    if (error && error !== prevMsg.current) {
       toast.error(error);
       dispatch(resetBorrowSlice());
-    }
-
-    // only toast for return success, not for fetch
-    if (message 
-      // && 
-      // /returned|successfully/i.test(message)
+      prevMsg.current = error;
+    } else if (
+      message &&
+      message !== prevMsg.current &&
+      !/fetch/i.test(message)
     ) {
       toast.success(message);
       dispatch(getAllBorrowedBooks());
       dispatch(resetBorrowSlice());
+      prevMsg.current = message;
     }
   }, [message, error, dispatch]);
 
