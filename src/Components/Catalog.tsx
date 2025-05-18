@@ -36,20 +36,21 @@ const Catalog: React.FC = () => {
   });
   const [activeTab, setActiveTab] = useState<'borrowed' | 'overdue'>('borrowed');
 
-  // fetch all records
+  // fetch all records once
   useEffect(() => {
     dispatch(getAllBorrowedBooks());
-  }, []);
+  }, [dispatch]);
 
-  // handle success/error messages
+  // handle success/error messages for return actions only
   useEffect(() => {
     if (error) {
       toast.error(error);
       dispatch(resetBorrowSlice());
     }
-    if (message && !message.toLowerCase().includes('fetch')) {
+
+    // only toast for return success, not for fetch
+    if (message && /returned|successfully/i.test(message)) {
       toast.success(message);
-      // re-fetch to update table
       dispatch(getAllBorrowedBooks());
       dispatch(resetBorrowSlice());
     }
