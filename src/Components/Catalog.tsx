@@ -26,7 +26,9 @@ const Catalog: React.FC = () => {
   const { allBorrowedBooks, loading, error, message } = useSelector(
     (state: RootState) => state.borrow
   );
-  const { returnPopup } = useSelector((state: RootState) => state.popup);
+  const { returnPopup } = useSelector(
+    (state: RootState) => state.popup
+  );
 
   const [emailAndId, setEmailAndId] = useState<EmailAndId>({
     email: '',
@@ -39,7 +41,7 @@ const Catalog: React.FC = () => {
     dispatch(getAllBorrowedBooks());
   }, [dispatch]);
 
-  // show errors or action messages
+  // handle success/error messages
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -47,8 +49,8 @@ const Catalog: React.FC = () => {
     }
     if (message && !message.toLowerCase().includes('fetch')) {
       toast.success(message);
-  dispatch(getAllBorrowedBooks());
-      dispatch(toggleReturnPopup())
+      // re-fetch to update table
+      dispatch(getAllBorrowedBooks());
       dispatch(resetBorrowSlice());
     }
   }, [message, error, dispatch]);
@@ -133,7 +135,12 @@ const Catalog: React.FC = () => {
       </div>
 
       {/* return popup */}
-      {returnPopup && <ReturnBookPopup email={emailAndId.email} id={emailAndId.id} />}
+      {returnPopup && (
+        <ReturnBookPopup
+          email={emailAndId.email}
+          id={emailAndId.id}
+        />
+      )}
     </div>
   );
 };
