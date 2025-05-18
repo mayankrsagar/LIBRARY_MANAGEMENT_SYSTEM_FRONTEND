@@ -43,27 +43,40 @@ const BookManagement: React.FC = () => {
 
   const [borrowBookId, setBorrowBookId] = useState<string>('');
   const [searchTitle, setSearchTitle] = useState<string>('');
-useEffect(() => {
-  // only show real write‐action successes
-  if (message && !message.toLowerCase().includes('fetch')) {
-    toast.success(message);
-    dispatch(resetBookSlice());
-  }
-  if (borrowMessage && !borrowMessage.toLowerCase().includes('fetch')) {
-    toast.success(borrowMessage);
-    dispatch(resetBorrowSlice());
-  }
+// useEffect(() => {
+//   // only show real write‐action successes
+//   if (message && !message.toLowerCase().includes('fetch')) {
+//     toast.success(message);
+//     dispatch(resetBookSlice());
+//   }
+//   if (borrowMessage && !borrowMessage.toLowerCase().includes('fetch')) {
+//     toast.success(borrowMessage);
+//     dispatch(resetBorrowSlice());
+//   }
 
-  // show errors always
-  if (error) {
-    toast.error(error);
+//   // show errors always
+//   if (error) {
+//     toast.error(error);
+//     dispatch(resetBookSlice());
+//   }
+//   if (borrowError) {
+//     toast.error(borrowError);
+//     dispatch(resetBorrowSlice());
+//   }
+// }, [message, borrowMessage, error, borrowError, dispatch]);
+
+useEffect(()=>{
+if(message || borrowMessage){
+  toast.success(message);
     dispatch(resetBookSlice());
-  }
-  if (borrowError) {
-    toast.error(borrowError);
     dispatch(resetBorrowSlice());
-  }
-}, [message, borrowMessage, error, borrowError, dispatch]);
+}
+if(error || borrowError){
+  toast.error(error || borrowError)
+  dispatch(resetBorrowSlice());
+  dispatch(resetBookSlice());
+}
+},[message, borrowMessage, error, borrowError])
 
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
